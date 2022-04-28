@@ -20,10 +20,9 @@ public class NeutralCardPurifyFromCurrentDream extends NeutralCard implements Di
                 null,
                 0);
     }
+
     @Override
     public void performOnPurchaseAction(Context context, Shop shop, IGameListener gameListener) {
-        // TODO show popup of possible cards to trash
-        Player player = gameListener.getCurrentPlayer();
         DialogChooseCardFromDream view = new DialogChooseCardFromDream(context, gameListener, this);
         dialog = new AlertDialog.Builder(context)
                 .setView(view)
