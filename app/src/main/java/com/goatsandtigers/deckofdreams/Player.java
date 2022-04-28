@@ -73,6 +73,10 @@ public class Player {
         dream.add(nextCard);
     }
 
+    public void addCardToDream(Card card) {
+        dream.add(card);
+    }
+
     public List<Card> getDream() {
         return Collections.unmodifiableList(dream);
     }

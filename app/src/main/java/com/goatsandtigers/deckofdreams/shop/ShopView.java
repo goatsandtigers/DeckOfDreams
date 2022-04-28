@@ -75,7 +75,24 @@ public class ShopView extends LinearLayout {
     }
 
     private void purchaseCard(Card card) {
+        if (!canAffordCard(card)) {
+            String msg = String.format("Not enough moments remaining to purchase %s.", card.getName());
+            gameListener.showMsg(msg);
+            return;
+        }
+        if (card.isAddToDream()) {
+            Player player = gameListener.getCurrentPlayer();
+            player.deductMoments(card.getCost());
+            player.addCardToDream(card);
+            gameListener.refreshDream();
+            gameListener.removeCardFromShop(card);
+        }
         card.performOnPurchaseAction(getContext(), shop, gameListener);
+    }
+
+    private boolean canAffordCard(Card card) {
+        int momentsRemaining = gameListener.getCurrentPlayer().getNumMoments();
+        return momentsRemaining >= card.getCost();
     }
 
     private Point getCardSize() {

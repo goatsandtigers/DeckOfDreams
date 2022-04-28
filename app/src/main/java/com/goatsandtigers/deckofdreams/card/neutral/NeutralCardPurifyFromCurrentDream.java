@@ -18,7 +18,8 @@ public class NeutralCardPurifyFromCurrentDream extends NeutralCard implements Di
                 2,
                 "Trash any card in current dream then trash this card.",
                 null,
-                0);
+                0,
+                false);
     }
 
     @Override
@@ -33,8 +34,7 @@ public class NeutralCardPurifyFromCurrentDream extends NeutralCard implements Di
     }
 
     @Override
-    public void onCardChosen(Card card, IGameListener gameListener) {
-        Player player = gameListener.getCurrentPlayer();
+    public void onCardChosen(Card card, IGameListener gameListener) { Player player = gameListener.getCurrentPlayer();
         player.removeCardFromDream(card);
         player.deductMoments(getCost());
         gameListener.removeCardFromShop(this);

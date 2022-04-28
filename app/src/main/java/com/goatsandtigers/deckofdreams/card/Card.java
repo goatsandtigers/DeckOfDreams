@@ -15,13 +15,15 @@ public abstract class Card {
     private final String onPurchaseText;
     private final String onDrawText;
     private final int onDrawMomentIncrease;
+    private final boolean addToDream;
 
-    public Card(String name, int cost, String onPurchaseText, String onDrawText, int onDrawMomentIncrease) {
+    public Card(String name, int cost, String onPurchaseText, String onDrawText, int onDrawMomentIncrease, boolean addToDream) {
         this.name = name;
         this.cost = cost;
         this.onPurchaseText = onPurchaseText;
         this.onDrawText = onDrawText;
         this.onDrawMomentIncrease = onDrawMomentIncrease;
+        this.addToDream = addToDream;
     }
 
     public String getName() {
@@ -43,6 +45,8 @@ public abstract class Card {
     public int getOnDrawMomentIncrease() {
         return onDrawMomentIncrease;
     }
+
+    public boolean isAddToDream() { return addToDream; }
 
     public void performOnPurchaseAction(Context context, Shop shop, IGameListener gameListener) {}
 

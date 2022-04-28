@@ -2,6 +2,7 @@ package com.goatsandtigers.deckofdreams;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.LinearLayout;
@@ -62,6 +63,15 @@ public class MainActivity extends AppCompatActivity implements IGameListener {
     public void removeCardFromShop(Card card) {
         game.getShop().removeCard(card);
         shopView.updateCards();
+    }
+
+    @Override
+    public void showMsg(String msg) {
+        new AlertDialog.Builder(this)
+                .setMessage(msg)
+                .setNegativeButton("Ok", null)
+                .create()
+                .show();
     }
 
     private void refreshPlayerLayout() {

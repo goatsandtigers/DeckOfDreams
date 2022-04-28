@@ -11,4 +11,6 @@ public interface IGameListener {
     Player getCurrentPlayer();
 
     void removeCardFromShop(Card card);
+
+    void showMsg(String msg);
 }
