@@ -3,6 +3,8 @@ package com.goatsandtigers.deckofdreams;
 import android.os.Bundle;
 
 import com.goatsandtigers.deckofdreams.cards.Card;
+import com.goatsandtigers.deckofdreams.cards.actions.Action;
+import com.goatsandtigers.deckofdreams.cards.actions.ActionOrdinal;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchaseEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseShopRow;
 import com.goatsandtigers.deckofdreams.player.Player;
@@ -28,6 +30,8 @@ import com.goatsandtigers.deckofdreams.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -114,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements GameController {
         return currentTurn.getMerit() >= card.getCost();
     }
 
-    List<Runnable> cardActions = Collections.emptyList();
+    List<Action> cardActions = Collections.emptyList();
 
     private void performOnPurchaseActions(Card card) {
         boolean inChain = cardActions != null && !cardActions.isEmpty();
@@ -122,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements GameController {
             cardActions = new ArrayList<>();
         }
         if (card instanceof OnPurchasePurchaseShopRow) {
-            cardActions.add(() -> {
+            cardActions.add(new Action(ActionOrdinal.PURCHASE_SHOP_ROW, () -> {
                 List<ShopRow> shopRows = shopAndDreamFragment.getShopRows();
                 Consumer<ShopRow> onClose = shopRow -> {
                     if (shopRow != null) {
@@ -135,20 +139,30 @@ public class MainActivity extends AppCompatActivity implements GameController {
                     } else {
                         cancelPurchase(card);
                         shopAndDreamFragment.returnCard(card);
+                        removeAction(ActionOrdinal.END_TURN);
                     }
                 };
                 new SelectShopRowView(this, shopRows, onClose).show();
-            });
+            }));
         }
         if (card instanceof OnPurchaseEndTurn) {
-            cardActions.add(() -> {
+            cardActions.add(new Action(ActionOrdinal.END_TURN, () -> {
                 nextTurn();
                 nextAction();
-            });
+            }));
         }
 
         if (!inChain) {
             nextAction();
+        }
+    }
+
+    private void removeAction(ActionOrdinal actionOrder) {
+        Iterator<Action> it = cardActions.iterator();
+        while (it.hasNext()) {
+            if (it.next().getActionOrder() == actionOrder) {
+                it.remove();
+            }
         }
     }
 
@@ -157,8 +171,12 @@ public class MainActivity extends AppCompatActivity implements GameController {
     }
 
     private void nextAction() {
+        // Sort chained actions into chronological order
+        Collections.sort(cardActions, Comparator.comparingInt(action -> action.getActionOrder().ordinal()));
+
+        // Execute the first action in the chain then remove it from the chain
         if (cardActions != null && !cardActions.isEmpty()) {
-            cardActions.remove(0).run();
+            cardActions.remove(0).getRunnable().run();
         }
     }
 
