@@ -18,7 +18,6 @@ import com.goatsandtigers.deckofdreams.ui.player.TurnView;
 import com.goatsandtigers.deckofdreams.ui.shop.ShopRow;
 import com.goatsandtigers.deckofdreams.ui.shop.ShopView;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ShopAndDreamFragment extends Fragment {
@@ -41,7 +40,7 @@ public class ShopAndDreamFragment extends Fragment {
         root.setOrientation(LinearLayout.VERTICAL);
         shopView = new ShopView(getContext(), gameController);
         turnView = new TurnView(getContext());
-        dreamView = new DreamView(getContext(), new Player());
+        dreamView = new DreamView(getContext(), new Player(null));
         root.addView(shopView);
         root.addView(turnView);
         root.addView(dreamView);
