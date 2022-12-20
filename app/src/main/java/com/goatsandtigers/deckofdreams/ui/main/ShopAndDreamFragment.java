@@ -72,12 +72,21 @@ public class ShopAndDreamFragment extends Fragment {
         }
     }
 
+    public void addCardToDream(Card card) {
+        dreamView.addCard(card);
+        refresh();
+    }
+
     public List<ShopRow> getShopRows() {
         return shopView.getShopRows();
     }
 
     public void returnCard(Card card) {
         shopView.addCard(card);
+    }
+
+    public void removeLastDreamCard() {
+        dreamView.removeLastCard();
     }
 
 }

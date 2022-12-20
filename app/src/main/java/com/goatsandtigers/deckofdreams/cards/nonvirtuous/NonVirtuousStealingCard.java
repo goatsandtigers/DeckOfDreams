@@ -1,6 +1,8 @@
 package com.goatsandtigers.deckofdreams.cards.nonvirtuous;
 
-public class NonVirtuousStealingCard extends NonVirtuousCard {
+import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseOneCard;
+
+public class NonVirtuousStealingCard extends NonVirtuousCard implements OnPurchasePurchaseOneCard {
 
     @Override
     public String getName() {

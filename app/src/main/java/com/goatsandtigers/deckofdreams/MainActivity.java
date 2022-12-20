@@ -6,12 +6,14 @@ import com.goatsandtigers.deckofdreams.cards.Card;
 import com.goatsandtigers.deckofdreams.cards.actions.Action;
 import com.goatsandtigers.deckofdreams.cards.actions.ActionOrdinal;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchaseEndTurn;
+import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseOneCard;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseShopRow;
 import com.goatsandtigers.deckofdreams.player.Player;
 import com.goatsandtigers.deckofdreams.player.Turn;
 import com.goatsandtigers.deckofdreams.ui.card.CardView;
 import com.goatsandtigers.deckofdreams.ui.main.DeckFragment;
 import com.goatsandtigers.deckofdreams.ui.main.ShopAndDreamFragment;
+import com.goatsandtigers.deckofdreams.ui.popups.SelectCardFromShopView;
 import com.goatsandtigers.deckofdreams.ui.popups.SelectShopRowView;
 import com.goatsandtigers.deckofdreams.ui.shop.ShopRow;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -97,14 +99,11 @@ public class MainActivity extends AppCompatActivity implements GameController {
     @Override
     public void purchaseCard(Card card) {
         currentTurn.spendMerit(card.getCost());
-        purchaseCardWithoutPaying(card);
+        addCardToDreamWithoutPaying(card);
     }
 
-    private void purchaseCardWithoutPaying(Card card) {
-        getCurrentPlayer().addCard(card);
-        // TODO remove card from shop
-        shopAndDreamFragment.refresh();
-        deckFragment.refresh();
+    private void addCardToDreamWithoutPaying(Card card) {
+        shopAndDreamFragment.addCardToDream(card);
         performOnPurchaseActions(card);
     }
 
@@ -125,6 +124,22 @@ public class MainActivity extends AppCompatActivity implements GameController {
         if (!inChain) {
             cardActions = new ArrayList<>();
         }
+
+        if (card instanceof OnPurchasePurchaseOneCard) {
+            cardActions.add(new Action(ActionOrdinal.PURCHASE_ONE_CARD, () -> {
+                List<ShopRow> shopRows = shopAndDreamFragment.getShopRows();
+                Consumer<CardView> onClose = cardView -> {
+                    if (cardView != null) {
+                        shopRows.forEach(shopRow -> shopRow.removeCard(cardView));
+                        addCardToDreamWithoutPaying(cardView.getCard());
+                        nextAction();
+                    } else {
+                        cancelPurchase(card);
+                    }
+                };
+                new SelectCardFromShopView(this, shopRows, onClose).show();
+            }));
+        }
         if (card instanceof OnPurchasePurchaseShopRow) {
             cardActions.add(new Action(ActionOrdinal.PURCHASE_SHOP_ROW, () -> {
                 List<ShopRow> shopRows = shopAndDreamFragment.getShopRows();
@@ -133,12 +148,11 @@ public class MainActivity extends AppCompatActivity implements GameController {
                         List<CardView> cardViewsInRow = new ArrayList<>(shopRow.getCardViewsInRow());
                         for (CardView cardView : cardViewsInRow) {
                             shopRow.removeCard(cardView);
-                            purchaseCardWithoutPaying(cardView.getCard());
+                            addCardToDreamWithoutPaying(cardView.getCard());
                         }
                         nextAction();
                     } else {
                         cancelPurchase(card);
-                        shopAndDreamFragment.returnCard(card);
                         removeAction(ActionOrdinal.END_TURN);
                     }
                 };
@@ -167,7 +181,8 @@ public class MainActivity extends AppCompatActivity implements GameController {
     }
 
     private void cancelPurchase(Card card) {
-        getCurrentPlayer().removeCard(card);
+        shopAndDreamFragment.returnCard(card);
+        shopAndDreamFragment.removeLastDreamCard();
     }
 
     private void nextAction() {
