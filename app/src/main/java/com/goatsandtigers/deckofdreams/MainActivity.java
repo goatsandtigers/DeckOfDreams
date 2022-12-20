@@ -91,10 +91,16 @@ public class MainActivity extends AppCompatActivity implements GameController {
 
 
     private void nextTurn() {
+        moveDreamCardsToDeck();
         currentPlayerIndex++;
         currentPlayerIndex %= players.size();
         currentTurn = new Turn(getCurrentPlayer());
         updateForNewTurn();
+    }
+
+    private void moveDreamCardsToDeck() {
+        List<Card> dreamCards = shopAndDreamFragment.getDreamCards();
+        dreamCards.forEach(getCurrentPlayer()::addCardToDeck);
     }
 
     @Override

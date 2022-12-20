@@ -47,4 +47,8 @@ public class Player {
         return Collections.unmodifiableList(deck);
     }
 
+    public void addCardToDeck(Card card) {
+        deck.add(card);
+    }
+
 }

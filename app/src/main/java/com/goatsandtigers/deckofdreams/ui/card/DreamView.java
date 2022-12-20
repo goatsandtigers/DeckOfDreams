@@ -9,6 +9,7 @@ import com.goatsandtigers.deckofdreams.player.TurnEndsException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DreamView extends LinearLayout {
 
@@ -47,5 +48,11 @@ public class DreamView extends LinearLayout {
     public void clear() {
         drawnCardViews.clear();
         removeAllViews();
+    }
+
+    public List<Card> getDrawnCards() {
+        return drawnCardViews.stream()
+                .map(CardView::getCard)
+                .collect(Collectors.toList());
     }
 }

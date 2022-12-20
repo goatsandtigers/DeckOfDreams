@@ -91,4 +91,8 @@ public class ShopAndDreamFragment extends Fragment {
         dreamView.removeLastCard();
     }
 
+    public List<Card> getDreamCards() {
+        return dreamView.getDrawnCards();
+    }
+
 }
