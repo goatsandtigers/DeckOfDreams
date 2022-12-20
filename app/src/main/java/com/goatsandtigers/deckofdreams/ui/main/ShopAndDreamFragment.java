@@ -58,7 +58,6 @@ public class ShopAndDreamFragment extends Fragment {
             refresh();
         }
         if (shopView != null) {
-            // TODO repopulate shop
             shopView.repopulate();
         }
     }
