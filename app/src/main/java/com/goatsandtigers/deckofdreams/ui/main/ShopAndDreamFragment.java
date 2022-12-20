@@ -59,6 +59,9 @@ public class ShopAndDreamFragment extends Fragment {
         if (shopView != null) {
             shopView.repopulate();
         }
+        if (dreamView != null) {
+            dreamView.clear();
+        }
     }
 
     public void refresh() {

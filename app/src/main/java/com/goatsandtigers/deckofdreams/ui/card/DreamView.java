@@ -43,4 +43,9 @@ public class DreamView extends LinearLayout {
         CardView lastCardView = drawnCardViews.remove(drawnCardViews.size() - 1);
         removeView(lastCardView);
     }
+
+    public void clear() {
+        drawnCardViews.clear();
+        removeAllViews();
+    }
 }
