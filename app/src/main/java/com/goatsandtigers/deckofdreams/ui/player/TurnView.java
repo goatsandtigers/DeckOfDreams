@@ -22,6 +22,7 @@ public class TurnView extends LinearLayout {
 
     public void refresh() {
         removeAllViews();
+        addView(buildTextView(turn.getPlayer().getName()));
         String meritString = "Merit: " + turn.getMerit();
         addView(buildTextView(meritString));
         String nonVirtuousActionsPerformed = "Non-virtuous actions performed: " + turn.getNumNonVirtuousCardsTurnedOver();

@@ -11,7 +11,13 @@ import java.util.List;
 
 public class Player {
 
-    private List<Card> deck = buildStartingDeck();
+    private List<Card> deck;
+    private String name;
+
+    public Player(String name) {
+        this.name = name;
+        deck = buildStartingDeck();
+    }
 
     private static List<Card> buildStartingDeck() {
         List<Card> startingCards = new ArrayList<>();
@@ -23,6 +29,10 @@ public class Player {
         startingCards.add(new StartingNeutralCard());
         Collections.shuffle(startingCards);
         return startingCards;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Card drawCard() throws TurnEndsException {

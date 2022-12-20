@@ -77,10 +77,10 @@ public class MainActivity extends AppCompatActivity implements GameController {
     private void newGame() {
         players = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            players.add(new Player());
+            players.add(new Player("Player " + (i + 1)));
         }
         currentPlayerIndex = 0;
-        currentTurn = new Turn();
+        currentTurn = new Turn(getCurrentPlayer());
         updateForNewTurn();
     }
 
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements GameController {
     private void nextTurn() {
         currentPlayerIndex++;
         currentPlayerIndex %= players.size();
+        currentTurn = new Turn(getCurrentPlayer());
         updateForNewTurn();
     }
 
