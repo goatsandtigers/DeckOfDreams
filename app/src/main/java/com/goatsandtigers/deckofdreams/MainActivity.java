@@ -69,9 +69,9 @@ public class MainActivity extends AppCompatActivity implements GameController {
                 shopAndDreamFragment.drawCard();
                 currentTurn.spendMerit(1);
                 shopAndDreamFragment.refresh();
-                showMsg(view, "Card drawn. 1 merit spent.");
+                showMsg("Card drawn. 1 merit spent.");
             } else {
-                showMsg(view, "Unable to draw card. 1 merit required.");
+                showMsg("Unable to draw card. 1 merit required.");
             }
         });
         fab.setImageBitmap(BitmapUtils.textAsBitmap("Draw"));
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements GameController {
         FloatingActionButton endTurnButton = binding.endTurn;
         endTurnButton.setOnClickListener(view -> {
             if (currentTurn.getMerit() > 0 && !getCurrentPlayer().getDeck().isEmpty()) {
-                showMsg(view, "Turn cannot end while merit > 0 and cards in deck.");
+                showMsg("Turn cannot end while merit > 0 and cards in deck.");
             } else {
                 nextTurn();
             }
@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements GameController {
         //sectionsPagerAdapter.getDeckFragment().setPlayer(players.get(0));
     }
 
-    private void showMsg(View view, String msg) {
-        Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
+    private void showMsg(String msg) {
+        Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_LONG)
                 .show();
     }
 
