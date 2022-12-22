@@ -17,6 +17,7 @@ import com.goatsandtigers.deckofdreams.ui.popups.SelectCardFromShopView;
 import com.goatsandtigers.deckofdreams.ui.popups.SelectShopRowView;
 import com.goatsandtigers.deckofdreams.ui.shop.ShopRow;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
@@ -62,16 +63,23 @@ public class MainActivity extends AppCompatActivity implements GameController {
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = binding.fab;
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fab.setOnClickListener(view -> {
+            if (currentTurn.getMerit() >= 1) {
                 shopAndDreamFragment.drawCard();
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
+                currentTurn.spendMerit(1);
+                shopAndDreamFragment.refresh();
+                showMsg(view, "Card drawn. 1 merit spent.");
+            } else {
+                showMsg(view, "Unable to draw card. 1 merit required.");
             }
         });
 
         //sectionsPagerAdapter.getDeckFragment().setPlayer(players.get(0));
+    }
+
+    private void showMsg(View view, String msg) {
+        Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
+                .show();
     }
 
     private void newGame() {
@@ -88,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements GameController {
         shopAndDreamFragment.setTurn(currentTurn);
         deckFragment.setPlayer(getCurrentPlayer());
     }
-
 
     private void nextTurn() {
         moveDreamCardsToDeck();
