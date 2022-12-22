@@ -7,7 +7,9 @@ import android.graphics.Paint;
 public class BitmapUtils {
 
     /**
-     * @see https://stackoverflow.com/questions/33671196/floatingactionbutton-with-text-instead-of-image
+     * Code taken from Stack Overflow.
+     * @see <a href="https://stackoverflow.com/questions/33671196/floatingactionbutton-with-text-instead-of-image">
+     *     https://stackoverflow.com/questions/33671196/floatingactionbutton-with-text-instead-of-image</a>
      */
     public static Bitmap textAsBitmap(String text) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
