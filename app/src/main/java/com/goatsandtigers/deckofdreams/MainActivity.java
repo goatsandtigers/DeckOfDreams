@@ -10,6 +10,7 @@ import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseOneCard;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseShopRow;
 import com.goatsandtigers.deckofdreams.player.Player;
 import com.goatsandtigers.deckofdreams.player.Turn;
+import com.goatsandtigers.deckofdreams.ui.BitmapUtils;
 import com.goatsandtigers.deckofdreams.ui.card.CardView;
 import com.goatsandtigers.deckofdreams.ui.main.DeckFragment;
 import com.goatsandtigers.deckofdreams.ui.main.ShopAndDreamFragment;
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements GameController {
                 showMsg(view, "Unable to draw card. 1 merit required.");
             }
         });
+        fab.setImageBitmap(BitmapUtils.textAsBitmap("Draw"));
 
         FloatingActionButton endTurnButton = binding.endTurn;
         endTurnButton.setOnClickListener(view -> {
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements GameController {
                 nextTurn();
             }
         });
+        endTurnButton.setImageBitmap(BitmapUtils.textAsBitmap("End"));
 
         //sectionsPagerAdapter.getDeckFragment().setPlayer(players.get(0));
     }
