@@ -74,6 +74,15 @@ public class MainActivity extends AppCompatActivity implements GameController {
             }
         });
 
+        FloatingActionButton endTurnButton = binding.endTurn;
+        endTurnButton.setOnClickListener(view -> {
+            if (currentTurn.getMerit() > 0 && !getCurrentPlayer().getDeck().isEmpty()) {
+                showMsg(view, "Turn cannot end while merit > 0 and cards in deck.");
+            } else {
+                nextTurn();
+            }
+        });
+
         //sectionsPagerAdapter.getDeckFragment().setPlayer(players.get(0));
     }
 
