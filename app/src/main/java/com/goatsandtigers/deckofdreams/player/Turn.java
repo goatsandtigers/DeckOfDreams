@@ -28,4 +28,8 @@ public class Turn {
     public void spendMerit(int cost) {
         merit -= cost;
     }
+
+    public void gainMerit(int gainedMerit) {
+        merit += gainedMerit;
+    }
 }

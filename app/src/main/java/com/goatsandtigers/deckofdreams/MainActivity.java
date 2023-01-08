@@ -6,6 +6,7 @@ import com.goatsandtigers.deckofdreams.cards.Card;
 import com.goatsandtigers.deckofdreams.cards.actions.Action;
 import com.goatsandtigers.deckofdreams.cards.actions.ActionOrdinal;
 import com.goatsandtigers.deckofdreams.cards.actions.OnDrawEndTurn;
+import com.goatsandtigers.deckofdreams.cards.actions.OnDrawGainMerit;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchaseEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseOneCard;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseShopRow;
@@ -230,6 +231,15 @@ public class MainActivity extends AppCompatActivity implements GameController {
         boolean inChain = cardActions != null && !cardActions.isEmpty();
         if (!inChain) {
             cardActions = new ArrayList<>();
+        }
+
+        if (card instanceof OnDrawGainMerit) {
+            cardActions.add(new Action(ActionOrdinal.GAIN_MERIT, () -> {
+                int gainedMerit = ((OnDrawGainMerit) card).getMeritGainedOnDraw();
+                getCurrentTurn().gainMerit(gainedMerit);
+                shopAndDreamFragment.refresh();
+                showMsg(gainedMerit + " merit gained.");
+            }));
         }
 
         if (card instanceof OnDrawEndTurn) {

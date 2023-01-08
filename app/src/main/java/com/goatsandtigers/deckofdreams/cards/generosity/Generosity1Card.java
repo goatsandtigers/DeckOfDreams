@@ -1,6 +1,8 @@
 package com.goatsandtigers.deckofdreams.cards.generosity;
 
-public class Generosity1Card extends GenerosityCard {
+import com.goatsandtigers.deckofdreams.cards.actions.OnDrawGainMerit;
+
+public class Generosity1Card extends GenerosityCard implements OnDrawGainMerit {
 
     @Override
     public String getName() {
@@ -19,6 +21,11 @@ public class Generosity1Card extends GenerosityCard {
 
     @Override
     public int getCost() {
+        return 1;
+    }
+
+    @Override
+    public int getMeritGainedOnDraw() {
         return 1;
     }
 }
