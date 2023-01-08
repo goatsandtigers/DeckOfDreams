@@ -23,14 +23,16 @@ public class DreamView extends LinearLayout {
         drawCard();
     }
 
-    public void drawCard() {
+    public Card drawCard() {
         try {
             Card card = player.drawCard();
             CardView cardView = new CardView(getContext(), card);
             drawnCardViews.add(cardView);
             addView(cardView);
+            return card;
         } catch (TurnEndsException e) {
             e.printStackTrace();
+            return null;
         }
     }
 

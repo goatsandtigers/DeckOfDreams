@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.goatsandtigers.deckofdreams.cards.Card;
 import com.goatsandtigers.deckofdreams.cards.actions.Action;
 import com.goatsandtigers.deckofdreams.cards.actions.ActionOrdinal;
+import com.goatsandtigers.deckofdreams.cards.actions.OnDrawEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchaseEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseOneCard;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseShopRow;
@@ -67,11 +68,12 @@ public class MainActivity extends AppCompatActivity implements GameController {
 
         fab.setOnClickListener(view -> {
             if (currentTurn.getMerit() >= 1) {
-                shopAndDreamFragment.drawCard();
+                Card card = shopAndDreamFragment.drawCard();
                 currentTurn.spendMerit(1);
                 shopAndDreamFragment.refresh();
                 deckFragment.refresh();
                 showMsg("Card drawn. 1 merit spent.");
+                performOnDrawActions(card);
             } else {
                 showMsg("Unable to draw card. 1 merit required.");
             }
@@ -221,6 +223,24 @@ public class MainActivity extends AppCompatActivity implements GameController {
         // Execute the first action in the chain then remove it from the chain
         if (cardActions != null && !cardActions.isEmpty()) {
             cardActions.remove(0).getRunnable().run();
+        }
+    }
+
+    private void performOnDrawActions(Card card) {
+        boolean inChain = cardActions != null && !cardActions.isEmpty();
+        if (!inChain) {
+            cardActions = new ArrayList<>();
+        }
+
+        if (card instanceof OnDrawEndTurn) {
+            cardActions.add(new Action(ActionOrdinal.END_TURN, () -> {
+                nextTurn();
+                nextAction();
+            }));
+        }
+
+        if (!inChain) {
+            nextAction();
         }
     }
 

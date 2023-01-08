@@ -69,9 +69,11 @@ public class ShopAndDreamFragment extends Fragment {
         turnView.refresh();
     }
 
-    public void drawCard() {
+    public Card drawCard() {
         if (dreamView != null) {
-            dreamView.drawCard();
+            return dreamView.drawCard();
+        } else {
+            return null;
         }
     }
 

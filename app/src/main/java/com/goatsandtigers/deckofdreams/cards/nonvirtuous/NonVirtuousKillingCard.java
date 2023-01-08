@@ -1,10 +1,11 @@
 package com.goatsandtigers.deckofdreams.cards.nonvirtuous;
 
+import com.goatsandtigers.deckofdreams.cards.actions.OnDrawEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchaseEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseShopRow;
 
 public class NonVirtuousKillingCard extends NonVirtuousCard implements OnPurchasePurchaseShopRow,
-        OnPurchaseEndTurn {
+        OnPurchaseEndTurn, OnDrawEndTurn {
 
     @Override
     public String getName() {
