@@ -13,6 +13,7 @@ import com.goatsandtigers.deckofdreams.player.Turn;
 import com.goatsandtigers.deckofdreams.ui.BitmapUtils;
 import com.goatsandtigers.deckofdreams.ui.card.CardView;
 import com.goatsandtigers.deckofdreams.ui.main.DeckFragment;
+import com.goatsandtigers.deckofdreams.ui.main.DiscardPileFragment;
 import com.goatsandtigers.deckofdreams.ui.main.ShopAndDreamFragment;
 import com.goatsandtigers.deckofdreams.ui.popups.SelectCardFromShopView;
 import com.goatsandtigers.deckofdreams.ui.popups.SelectShopRowView;
@@ -28,8 +29,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
-
 import com.goatsandtigers.deckofdreams.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
@@ -44,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements GameController {
     private ActivityMainBinding binding;
     private ShopAndDreamFragment shopAndDreamFragment = new ShopAndDreamFragment(this);
     private DeckFragment deckFragment = new DeckFragment();
+    private DiscardPileFragment discardPileFragment = new DiscardPileFragment();
     private List<Player> players;
     private int currentPlayerIndex;
     private Turn currentTurn;
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements GameController {
 
         newGame();
         deckFragment.setPlayer(players.get(0));
+        discardPileFragment.setPlayer(players.get(0));
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements GameController {
                 shopAndDreamFragment.drawCard();
                 currentTurn.spendMerit(1);
                 shopAndDreamFragment.refresh();
+                deckFragment.refresh();
                 showMsg("Card drawn. 1 merit spent.");
             } else {
                 showMsg("Unable to draw card. 1 merit required.");
@@ -107,19 +109,20 @@ public class MainActivity extends AppCompatActivity implements GameController {
     private void updateForNewTurn() {
         shopAndDreamFragment.setTurn(currentTurn);
         deckFragment.setPlayer(getCurrentPlayer());
+        discardPileFragment.setPlayer(getCurrentPlayer());
     }
 
     private void nextTurn() {
-        moveDreamCardsToDeck();
+        moveDreamCardsToDiscardPile();
         currentPlayerIndex++;
         currentPlayerIndex %= players.size();
         currentTurn = new Turn(getCurrentPlayer());
         updateForNewTurn();
     }
 
-    private void moveDreamCardsToDeck() {
+    private void moveDreamCardsToDiscardPile() {
         List<Card> dreamCards = shopAndDreamFragment.getDreamCards();
-        dreamCards.forEach(getCurrentPlayer()::addCardToDeck);
+        dreamCards.forEach(getCurrentPlayer()::addCardToDiscardPile);
     }
 
     @Override
@@ -233,21 +236,25 @@ public class MainActivity extends AppCompatActivity implements GameController {
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 0) {
-                return shopAndDreamFragment;
-            } else {
-                return deckFragment;
+            switch (position) {
+                case 0: return shopAndDreamFragment;
+                case 1: return deckFragment;
+                default: return discardPileFragment;
             }
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return position == 0 ? "Dream" : "Deck";
+            switch (position) {
+                case 0: return "Dream";
+                case 1: return "Deck";
+                default: return "Discard Pile";
+            }
         }
     }
 }

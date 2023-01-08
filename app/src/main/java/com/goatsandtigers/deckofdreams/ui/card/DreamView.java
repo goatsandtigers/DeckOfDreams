@@ -55,4 +55,8 @@ public class DreamView extends LinearLayout {
                 .map(CardView::getCard)
                 .collect(Collectors.toList());
     }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }

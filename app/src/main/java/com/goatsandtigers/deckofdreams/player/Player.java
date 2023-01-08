@@ -12,11 +12,13 @@ import java.util.List;
 public class Player {
 
     private List<Card> deck;
+    private List<Card> discardPile;
     private String name;
 
     public Player(String name) {
         this.name = name;
         deck = buildStartingDeck();
+        discardPile = new ArrayList<>();
     }
 
     private static List<Card> buildStartingDeck() {
@@ -38,6 +40,9 @@ public class Player {
     public Card drawCard() throws TurnEndsException {
         if (!deck.isEmpty()) {
             return deck.remove(0);
+        } else if (!discardPile.isEmpty()) {
+            moveDiscardPileToDeck();
+            return deck.remove(0);
         } else {
             throw new TurnEndsException("Out of cards.");
         }
@@ -47,8 +52,18 @@ public class Player {
         return Collections.unmodifiableList(deck);
     }
 
-    public void addCardToDeck(Card card) {
-        deck.add(card);
+    public List<Card> getDiscardPile() {
+        return Collections.unmodifiableList(discardPile);
+    }
+
+    public void addCardToDiscardPile(Card card) {
+        discardPile.add(card);
+    }
+
+    private void moveDiscardPileToDeck() {
+        deck.addAll(discardPile);
+        Collections.shuffle(deck);
+        discardPile.clear();
     }
 
 }

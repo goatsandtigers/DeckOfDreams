@@ -1,6 +1,5 @@
 package com.goatsandtigers.deckofdreams.ui.main;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.goatsandtigers.deckofdreams.GameController;
 import com.goatsandtigers.deckofdreams.cards.Card;
 import com.goatsandtigers.deckofdreams.player.Player;
 import com.goatsandtigers.deckofdreams.ui.card.CardView;
@@ -19,7 +17,7 @@ import com.goatsandtigers.deckofdreams.ui.card.CardView;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DeckFragment extends Fragment {
+public class DiscardPileFragment extends Fragment {
 
     private LinearLayout root;
     private Player player;
@@ -45,14 +43,14 @@ public class DeckFragment extends Fragment {
 
         root.removeAllViews();
 
-        if (player.getDeck().isEmpty()) {
-            TextView noCardsTextView = buildTextView("No cards in deck.");
+        if (player.getDiscardPile().isEmpty()) {
+            TextView noCardsTextView = buildTextView("No cards in discard pile.");
             root.addView(noCardsTextView);
             return;
         }
 
         Map<Class<? extends Card>, Integer> cardCounts = new HashMap<>();
-        for (Card card : player.getDeck()) {
+        for (Card card : player.getDiscardPile()) {
             int previousCount = cardCounts.getOrDefault(card.getClass(), Integer.valueOf(0));
             cardCounts.put(card.getClass(), Integer.valueOf(previousCount + 1));
         }

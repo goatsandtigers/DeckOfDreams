@@ -60,6 +60,7 @@ public class ShopAndDreamFragment extends Fragment {
             shopView.repopulate();
         }
         if (dreamView != null) {
+            dreamView.setPlayer(turn.getPlayer());
             dreamView.clear();
         }
     }
