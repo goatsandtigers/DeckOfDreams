@@ -20,6 +20,7 @@ public abstract class GenerosityCard extends Card {
                 new Generosity3Card(),
                 new Generosity4Card(),
                 new Generosity5Card(),
-                new Generosity6Card()));
+                new Generosity6Card(),
+                new GenerosityGiveFearlessnessCard()));
     }
 }

@@ -1,5 +1,6 @@
 package com.goatsandtigers.deckofdreams;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 
@@ -8,6 +9,7 @@ import com.goatsandtigers.deckofdreams.cards.actions.Action;
 import com.goatsandtigers.deckofdreams.cards.actions.ActionOrdinal;
 import com.goatsandtigers.deckofdreams.cards.actions.OnDrawEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnDrawGainMerit;
+import com.goatsandtigers.deckofdreams.cards.actions.OnDrawPurchaseOneCard;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchaseEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseOneCard;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseShopRow;
@@ -259,6 +261,10 @@ public class MainActivity extends AppCompatActivity implements GameController {
             }));
         }
 
+        if (card instanceof OnDrawPurchaseOneCard) {
+            addPurchaseOneCardAction();
+        }
+
         if (card instanceof OnDrawEndTurn) {
             cardActions.add(new Action(ActionOrdinal.END_TURN, () -> {
                 waitForPlayerToEndTurn();
@@ -269,6 +275,28 @@ public class MainActivity extends AppCompatActivity implements GameController {
         if (!inChain) {
             nextAction();
         }
+    }
+
+    private void addPurchaseOneCardAction() {
+        cardActions.add(new Action(ActionOrdinal.PURCHASE_ONE_CARD, () -> {
+            List<ShopRow> shopRows = shopAndDreamFragment.getShopRows();
+            Consumer<CardView> onClose = cardView -> {
+                if (cardView != null) {
+                    shopRows.forEach(shopRow -> shopRow.removeCard(cardView));
+                    addCardToDreamWithoutPaying(cardView.getCard());
+                    nextAction();
+                } else {
+                    new AlertDialog.Builder(this)
+                            .setMessage("Are you sure you don't want to purchase a card for free?")
+                            .setPositiveButton("Yes I don't want to", null)
+                            .setNegativeButton("No I want to purchase a card for free", (a, b) -> {
+                                addPurchaseOneCardAction();
+                                nextAction();
+                            }).show();
+                }
+            };
+            new SelectCardFromShopView(this, shopRows, onClose).show();
+        }));
     }
 
     private Player getCurrentPlayer() {
