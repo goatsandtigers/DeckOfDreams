@@ -1,5 +1,6 @@
 package com.goatsandtigers.deckofdreams.cards.nonvirtuous;
 
+import com.goatsandtigers.deckofdreams.GameController;
 import com.goatsandtigers.deckofdreams.cards.actions.OnDrawEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchaseEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseShopRow;
@@ -22,13 +23,12 @@ public class NonVirtuousKillingCard extends NonVirtuousCard implements OnPurchas
         return "You wake up screaming. The dream ends.";
     }
 
-    @Override
-    public String getOnPurchaseMsg() {
+    public String getOnPurchaseMsg(GameController gameController) {
         return "Purchasing Killing card ends turn.";
     }
 
     @Override
-    public String getOnDrawMsg() {
+    public String getOnDrawMsg(GameController gameController) {
         return "Drawing Killing card ends turn.";
     }
 

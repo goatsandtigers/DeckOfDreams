@@ -100,6 +100,10 @@ public class MainActivity extends AppCompatActivity implements GameController {
     }
 
     public void showMsg(String msg) {
+        if (msg == null) {
+            return;
+        }
+
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_LONG)
                 .show();
     }
@@ -157,6 +161,8 @@ public class MainActivity extends AppCompatActivity implements GameController {
     List<Action> cardActions = Collections.emptyList();
 
     private void performOnPurchaseActions(Card card) {
+        showMsg(card.getOnPurchaseMsg(this));
+
         boolean inChain = cardActions != null && !cardActions.isEmpty();
         if (!inChain) {
             cardActions = new ArrayList<>();
@@ -198,8 +204,6 @@ public class MainActivity extends AppCompatActivity implements GameController {
         }
         if (card instanceof OnPurchaseEndTurn) {
             cardActions.add(new Action(ActionOrdinal.END_TURN, () -> {
-                String msg = ((OnPurchaseEndTurn) card).getOnPurchaseMsg();
-                showMsg(msg);
                 waitForPlayerToEndTurn();
                 nextAction();
             }));
@@ -220,6 +224,9 @@ public class MainActivity extends AppCompatActivity implements GameController {
     }
 
     private void cancelPurchase(Card card) {
+        String msg = "Cancelled purchase of " + card.getName() + ".";
+        showMsg(msg);
+
         shopAndDreamFragment.returnCard(card);
         shopAndDreamFragment.removeLastDreamCard();
     }
@@ -235,6 +242,8 @@ public class MainActivity extends AppCompatActivity implements GameController {
     }
 
     private void performOnDrawActions(Card card) {
+        showMsg(card.getOnDrawMsg(this));
+
         boolean inChain = cardActions != null && !cardActions.isEmpty();
         if (!inChain) {
             cardActions = new ArrayList<>();
@@ -251,8 +260,6 @@ public class MainActivity extends AppCompatActivity implements GameController {
 
         if (card instanceof OnDrawEndTurn) {
             cardActions.add(new Action(ActionOrdinal.END_TURN, () -> {
-                String msg = ((OnDrawEndTurn) card).getOnDrawMsg();
-                showMsg(msg);
                 waitForPlayerToEndTurn();
                 nextAction();
             }));
