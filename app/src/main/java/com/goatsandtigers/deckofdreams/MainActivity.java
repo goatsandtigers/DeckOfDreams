@@ -78,6 +78,11 @@ public class MainActivity extends AppCompatActivity implements GameController {
 
             if (currentTurn.getMerit() >= 1) {
                 Card card = shopAndDreamFragment.drawCard();
+                if (card == null) {
+                    showMsg(MsgConstants.NO_CARDS_TO_DRAW);
+                    waitForPlayerToEndTurn();
+                    return;
+                }
                 currentTurn.spendMerit(1);
                 shopAndDreamFragment.refresh();
                 deckFragment.refresh();
