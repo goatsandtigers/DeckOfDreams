@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
 import com.goatsandtigers.deckofdreams.GameController;
+import com.goatsandtigers.deckofdreams.MsgConstants;
 import com.goatsandtigers.deckofdreams.cards.Card;
 import com.goatsandtigers.deckofdreams.ui.card.CardView;
 
@@ -45,6 +46,11 @@ public abstract class ShopRow extends LinearLayout {
 
             @Override
             public boolean onTouchEvent(MotionEvent event) {
+                if (gameController.isTurnOver()) {
+                    gameController.showMsg(MsgConstants.PLEASE_PRESS_END_TURN);
+                    return false;
+                }
+
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     purchaseCard(this);
                 }

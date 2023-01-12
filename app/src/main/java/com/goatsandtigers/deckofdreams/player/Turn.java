@@ -6,6 +6,7 @@ public class Turn {
 
     private int merit;
     private int numNonVirtuousCardsTurnedOver;
+    private boolean over;
 
     public Turn(Player player) {
         this.player = player;
@@ -32,4 +33,13 @@ public class Turn {
     public void gainMerit(int gainedMerit) {
         merit += gainedMerit;
     }
+
+    public boolean isOver() {
+        return over;
+    }
+
+    public void setOver(boolean over) {
+        this.over = over;
+    }
+
 }

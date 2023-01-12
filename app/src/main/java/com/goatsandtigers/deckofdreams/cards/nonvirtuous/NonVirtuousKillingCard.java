@@ -22,4 +22,14 @@ public class NonVirtuousKillingCard extends NonVirtuousCard implements OnPurchas
         return "You wake up screaming. The dream ends.";
     }
 
+    @Override
+    public String getOnPurchaseMsg() {
+        return "Purchasing Killing card ends turn.";
+    }
+
+    @Override
+    public String getOnDrawMsg() {
+        return "Drawing Killing card ends turn.";
+    }
+
 }

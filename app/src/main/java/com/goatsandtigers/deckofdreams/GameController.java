@@ -10,4 +10,8 @@ public interface GameController {
     void purchaseCard(Card card);
 
     Turn getCurrentTurn();
+
+    void showMsg(String msg);
+
+    boolean isTurnOver();
 }

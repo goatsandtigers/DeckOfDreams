@@ -68,6 +68,11 @@ public class MainActivity extends AppCompatActivity implements GameController {
         FloatingActionButton fab = binding.fab;
 
         fab.setOnClickListener(view -> {
+            if (isTurnOver()) {
+                showMsg(MsgConstants.PLEASE_PRESS_END_TURN);
+                return;
+            }
+
             if (currentTurn.getMerit() >= 1) {
                 Card card = shopAndDreamFragment.drawCard();
                 currentTurn.spendMerit(1);
@@ -83,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements GameController {
 
         FloatingActionButton endTurnButton = binding.endTurn;
         endTurnButton.setOnClickListener(view -> {
-            if (currentTurn.getMerit() > 0 && !getCurrentPlayer().getDeck().isEmpty()) {
+            if (!currentTurn.isOver() && currentTurn.getMerit() > 0 && !getCurrentPlayer().getDeck().isEmpty()) {
                 showMsg("Turn cannot end while merit > 0 and cards in deck.");
             } else {
                 nextTurn();
@@ -94,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements GameController {
         //sectionsPagerAdapter.getDeckFragment().setPlayer(players.get(0));
     }
 
-    private void showMsg(String msg) {
+    public void showMsg(String msg) {
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_LONG)
                 .show();
     }
@@ -193,7 +198,9 @@ public class MainActivity extends AppCompatActivity implements GameController {
         }
         if (card instanceof OnPurchaseEndTurn) {
             cardActions.add(new Action(ActionOrdinal.END_TURN, () -> {
-                nextTurn();
+                String msg = ((OnPurchaseEndTurn) card).getOnPurchaseMsg();
+                showMsg(msg);
+                waitForPlayerToEndTurn();
                 nextAction();
             }));
         }
@@ -244,7 +251,9 @@ public class MainActivity extends AppCompatActivity implements GameController {
 
         if (card instanceof OnDrawEndTurn) {
             cardActions.add(new Action(ActionOrdinal.END_TURN, () -> {
-                nextTurn();
+                String msg = ((OnDrawEndTurn) card).getOnDrawMsg();
+                showMsg(msg);
+                waitForPlayerToEndTurn();
                 nextAction();
             }));
         }
@@ -256,6 +265,16 @@ public class MainActivity extends AppCompatActivity implements GameController {
 
     private Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
+    }
+
+    private void waitForPlayerToEndTurn() {
+        if (currentTurn != null) {
+            currentTurn.setOver(true);
+        }
+    }
+
+    public boolean isTurnOver() {
+        return currentTurn != null && currentTurn.isOver();
     }
 
     public class DeckOfDreamsFragmentPagerAdapter extends FragmentPagerAdapter {
