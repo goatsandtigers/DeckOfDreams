@@ -1,8 +1,9 @@
 package com.goatsandtigers.deckofdreams.ui.card;
 
 import android.content.Context;
-import android.widget.LinearLayout;
+import android.widget.GridLayout;
 
+import com.goatsandtigers.deckofdreams.GameController;
 import com.goatsandtigers.deckofdreams.cards.Card;
 import com.goatsandtigers.deckofdreams.player.Player;
 import com.goatsandtigers.deckofdreams.player.TurnEndsException;
@@ -11,15 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DreamView extends LinearLayout {
+public class DreamView extends GridLayout {
 
     private List<CardView> drawnCardViews = new ArrayList<>();
     private Player player;
     private int moments = 1;
 
-    public DreamView(Context context, Player player) {
+    public DreamView(Context context, Player player, GameController gameController) {
         super(context);
         this.player = player;
+        int screenWidth = gameController.getDisplayMetrics().widthPixels;
+        setColumnCount(screenWidth / CardView.WIDTH);
         drawCard();
     }
 

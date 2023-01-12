@@ -40,7 +40,7 @@ public class ShopAndDreamFragment extends Fragment {
         root.setOrientation(LinearLayout.VERTICAL);
         shopView = new ShopView(getContext(), gameController);
         turnView = new TurnView(getContext());
-        dreamView = new DreamView(getContext(), new Player(null));
+        dreamView = new DreamView(getContext(), new Player(null), gameController);
         root.addView(shopView);
         root.addView(turnView);
         root.addView(dreamView);

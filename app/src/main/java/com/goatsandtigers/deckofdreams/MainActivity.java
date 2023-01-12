@@ -1,6 +1,7 @@
 package com.goatsandtigers.deckofdreams;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
 import com.goatsandtigers.deckofdreams.cards.Card;
 import com.goatsandtigers.deckofdreams.cards.actions.Action;
@@ -282,6 +283,13 @@ public class MainActivity extends AppCompatActivity implements GameController {
 
     public boolean isTurnOver() {
         return currentTurn != null && currentTurn.isOver();
+    }
+
+    @Override
+    public DisplayMetrics getDisplayMetrics() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics;
     }
 
     public class DeckOfDreamsFragmentPagerAdapter extends FragmentPagerAdapter {

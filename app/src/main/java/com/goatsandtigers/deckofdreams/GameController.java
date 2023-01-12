@@ -1,5 +1,7 @@
 package com.goatsandtigers.deckofdreams;
 
+import android.util.DisplayMetrics;
+
 import com.goatsandtigers.deckofdreams.cards.Card;
 import com.goatsandtigers.deckofdreams.player.Turn;
 
@@ -14,4 +16,6 @@ public interface GameController {
     void showMsg(String msg);
 
     boolean isTurnOver();
+
+    DisplayMetrics getDisplayMetrics();
 }
