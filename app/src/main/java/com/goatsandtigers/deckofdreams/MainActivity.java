@@ -11,12 +11,14 @@ import com.goatsandtigers.deckofdreams.cards.actions.OnDrawEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnDrawGainMerit;
 import com.goatsandtigers.deckofdreams.cards.actions.OnDrawMayNotPurchase;
 import com.goatsandtigers.deckofdreams.cards.actions.OnDrawPurchaseOneCard;
+import com.goatsandtigers.deckofdreams.cards.actions.OnDrawTrashCardTypes;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchaseEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseOneCard;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseShopRow;
 import com.goatsandtigers.deckofdreams.player.Player;
 import com.goatsandtigers.deckofdreams.player.Turn;
 import com.goatsandtigers.deckofdreams.ui.BitmapUtils;
+import com.goatsandtigers.deckofdreams.ui.CardStringUtils;
 import com.goatsandtigers.deckofdreams.ui.card.CardView;
 import com.goatsandtigers.deckofdreams.ui.main.DeckFragment;
 import com.goatsandtigers.deckofdreams.ui.main.DiscardPileFragment;
@@ -84,6 +86,11 @@ public class MainActivity extends AppCompatActivity implements GameController {
                     waitForPlayerToEndTurn();
                     return;
                 }
+                if (shouldTrashOnDraw(card)) {
+                    shopAndDreamFragment.removeLastDreamCard();
+                    trashCard(card);
+                    return;
+                }
                 currentTurn.spendMerit(1);
                 shopAndDreamFragment.refresh();
                 deckFragment.refresh();
@@ -106,6 +113,33 @@ public class MainActivity extends AppCompatActivity implements GameController {
         endTurnButton.setImageBitmap(BitmapUtils.textAsBitmap("End"));
 
         //sectionsPagerAdapter.getDeckFragment().setPlayer(players.get(0));
+    }
+
+    private boolean shouldTrashOnDraw(Card card) {
+        for (Card dreamCard : shopAndDreamFragment.getDreamCards()) {
+            if (dreamCard instanceof OnDrawTrashCardTypes) {
+                List<Class<?>> cardsTypesToTrash = ((OnDrawTrashCardTypes) dreamCard).cardTypesToTrash();
+                if (cardsTypesToTrash.contains(card.getClass())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void trashCard(Card card) {
+        String cardName = card.getName();
+        String cardCausingTrash = "Opponent Force";
+        for (Card dreamCard : shopAndDreamFragment.getDreamCards()) {
+            if (dreamCard instanceof OnDrawTrashCardTypes) {
+                List<Class<?>> cardsTypesToTrash = ((OnDrawTrashCardTypes) dreamCard).cardTypesToTrash();
+                if (cardsTypesToTrash.contains(card.getClass())) {
+                    cardCausingTrash = dreamCard.getName();
+                }
+            }
+        }
+        String msg = String.format("%s card trashed because the dream contains %s.", cardName, cardCausingTrash);
+        showMsg(msg);
     }
 
     public void showMsg(String msg) {
@@ -271,6 +305,13 @@ public class MainActivity extends AppCompatActivity implements GameController {
             addPurchaseOneCardAction();
         }
 
+        if (card instanceof OnDrawTrashCardTypes) {
+            List<Class<?>> cardTypesToTrash = cardTypesToTrash();
+            String cardTypeNamesToTrash = CardStringUtils.joinCardTypeNames(cardTypesToTrash);
+            String msg = String.format("All %s cards drawn this turn will have no effect and will be trashed.", cardTypeNamesToTrash);
+            showMsg(msg);
+        }
+
         if (card instanceof OnDrawEndTurn) {
             cardActions.add(new Action(ActionOrdinal.END_TURN, () -> {
                 waitForPlayerToEndTurn();
@@ -327,6 +368,18 @@ public class MainActivity extends AppCompatActivity implements GameController {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<Class<?>> cardTypesToTrash() {
+        List<Class<?>> result = new ArrayList<>();
+        for (Card card : shopAndDreamFragment.getDreamCards()) {
+            if (card instanceof OnDrawTrashCardTypes) {
+                List<Class<?>> cardsTypesToTrash = ((OnDrawTrashCardTypes) card).cardTypesToTrash();
+                result.addAll(cardsTypesToTrash);
+            }
+        }
+        return result;
     }
 
     @Override
