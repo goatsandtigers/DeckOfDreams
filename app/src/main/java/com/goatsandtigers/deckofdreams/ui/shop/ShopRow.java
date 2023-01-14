@@ -58,7 +58,7 @@ public abstract class ShopRow extends LinearLayout {
             }
         };
         cardViewsInRow.add(cardView);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(140, 398);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(140, 200);
         layoutParams.setMargins(24, 0, 0, 0);
         addView(cardView, layoutParams);
     }
