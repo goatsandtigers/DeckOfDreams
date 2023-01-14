@@ -17,5 +17,7 @@ public interface GameController {
 
     boolean isTurnOver();
 
+    Card getPurchaseNotAllowedCardInDream();
+
     DisplayMetrics getDisplayMetrics();
 }

@@ -65,12 +65,17 @@ public abstract class ShopRow extends LinearLayout {
 
     private void purchaseCard(CardView cardView) {
         Card card = cardView.getCard();
-        if (gameController.canAffordCard(card)) {
-            removeCard(cardView);
-            gameController.purchaseCard(card);
-        } else {
+        if (!gameController.canAffordCard(card)) {
             String msg = String.format("The card \"%s\" costs %d.\n\nCurrent merit: %d", card.getName(), card.getCost(), gameController.getCurrentTurn().getMerit());
             showMsg("Unable to purchase", msg);
+        } else if (gameController.getPurchaseNotAllowedCardInDream() != null) {
+            Card purchaseNotAllowedCard = gameController.getPurchaseNotAllowedCardInDream();
+            String cardName = purchaseNotAllowedCard.getName();
+            String msg = String.format("The effect of %s in a previous dream has ripened. You may not purchase anything for the rest of this dream.", cardName);
+            showMsg("Unable to purchase", msg);
+        } else {
+            removeCard(cardView);
+            gameController.purchaseCard(card);
         }
     }
 

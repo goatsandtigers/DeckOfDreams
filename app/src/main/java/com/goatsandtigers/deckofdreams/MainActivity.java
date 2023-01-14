@@ -9,6 +9,7 @@ import com.goatsandtigers.deckofdreams.cards.actions.Action;
 import com.goatsandtigers.deckofdreams.cards.actions.ActionOrdinal;
 import com.goatsandtigers.deckofdreams.cards.actions.OnDrawEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnDrawGainMerit;
+import com.goatsandtigers.deckofdreams.cards.actions.OnDrawMayNotPurchase;
 import com.goatsandtigers.deckofdreams.cards.actions.OnDrawPurchaseOneCard;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchaseEndTurn;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseOneCard;
@@ -316,6 +317,16 @@ public class MainActivity extends AppCompatActivity implements GameController {
 
     public boolean isTurnOver() {
         return currentTurn != null && currentTurn.isOver();
+    }
+
+    @Override
+    public Card getPurchaseNotAllowedCardInDream() {
+        for (Card card : shopAndDreamFragment.getDreamCards()) {
+            if (card instanceof OnDrawMayNotPurchase) {
+                return card;
+            }
+        }
+        return null;
     }
 
     @Override

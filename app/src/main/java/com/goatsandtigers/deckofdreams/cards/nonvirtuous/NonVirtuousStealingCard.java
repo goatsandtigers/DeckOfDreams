@@ -1,8 +1,10 @@
 package com.goatsandtigers.deckofdreams.cards.nonvirtuous;
 
+import com.goatsandtigers.deckofdreams.cards.actions.OnDrawMayNotPurchase;
 import com.goatsandtigers.deckofdreams.cards.actions.OnPurchasePurchaseOneCard;
 
-public class NonVirtuousStealingCard extends NonVirtuousCard implements OnPurchasePurchaseOneCard {
+public class NonVirtuousStealingCard extends NonVirtuousCard implements OnPurchasePurchaseOneCard,
+        OnDrawMayNotPurchase {
 
     @Override
     public String getName() {
