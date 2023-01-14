@@ -16,7 +16,6 @@ public class DreamView extends GridLayout {
 
     private List<CardView> drawnCardViews = new ArrayList<>();
     private Player player;
-    private int moments = 1;
 
     public DreamView(Context context, Player player, GameController gameController) {
         super(context);
